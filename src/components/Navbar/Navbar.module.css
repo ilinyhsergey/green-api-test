@@ -1,0 +1,42 @@
+.navbar {
+    background-color: light-dark(var(--mantine-color-white), var(--mantine-color-dark-6));
+    height: 100%;
+    width: 300px;
+    display: flex;
+    flex-direction: column;
+    border-right: 1px solid light-dark(var(--mantine-color-gray-3), var(--mantine-color-dark-4));
+}
+
+.wrapper {
+    display: flex;
+    flex: 1;
+}
+
+.aside {
+    flex: 0 0 60px;
+    background-color: var(--mantine-color-body);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    border-right: 1px solid light-dark(var(--mantine-color-gray-3), var(--mantine-color-dark-7));
+}
+
+.main {
+    flex: 1;
+    background-color: light-dark(var(--mantine-color-gray-0), var(--mantine-color-dark-6));
+}
+
+
+
+.title {
+    font-family: Outfit, var(--mantine-font-family);
+    margin-bottom: var(--mantine-spacing-xl);
+    background-color: var(--mantine-color-body);
+    padding: var(--mantine-spacing-md);
+    font-weight: 500;
+    padding-top: 18px;
+    height: 60px;
+    border-bottom: 1px solid light-dark(var(--mantine-color-gray-3), var(--mantine-color-dark-7));
+}
+

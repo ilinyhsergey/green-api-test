@@ -4,6 +4,7 @@ import { AppShell, Burger, Group } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 
 import appLogo from '../../assets/Logo_GREEN-API.00ec17ef.svg';
+import { Navbar } from '../Navbar/Navbar.tsx';
 import classes from './AppRoot.module.css';
 
 
@@ -24,8 +25,8 @@ export const AppRoot: FC = () => {
         </Group>
       </AppShell.Header>
 
-      <AppShell.Navbar p="md">
-        Navbar
+      <AppShell.Navbar>
+        <Navbar/>
       </AppShell.Navbar>
 
       <AppShell.Main>
