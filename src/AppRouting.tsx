@@ -1,10 +1,10 @@
 import type { FC } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router';
 
-import { Settings } from './components/Settings.tsx';
-import { Chats } from './components/Chats.tsx';
-import { Chat } from './components/Chat.tsx';
-import { AppRoot } from './components/AppRoot.tsx';
+import { Settings } from './components/Settings/Settings.tsx';
+import { Chats } from './components/Chats/Chats.tsx';
+import { Chat } from './components/Chat/Chat.tsx';
+import { AppRoot } from './components/AppRoot/AppRoot.tsx';
 
 export const AppRouter: FC = () => {
   return (

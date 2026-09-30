@@ -3,7 +3,7 @@ import { Outlet } from 'react-router';
 import { AppShell, Burger, Group } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 
-import appLogo from '../assets/Logo_GREEN-API.00ec17ef.svg';
+import appLogo from '../../assets/Logo_GREEN-API.00ec17ef.svg';
 import classes from './AppRoot.module.css';
 
 
