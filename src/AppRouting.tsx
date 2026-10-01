@@ -11,6 +11,7 @@ export const AppRouter: FC = () => {
       <Routes>
         <Route path="/" element={<AppRoot />}>
           <Route path="settings" element={<Settings/>}/>
+          <Route path="chat" element={<Chat/>}/>
           <Route path="chat/:chatId" element={<Chat/>}/>
         </Route>
       </Routes>
