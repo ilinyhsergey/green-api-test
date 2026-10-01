@@ -28,3 +28,11 @@ export const useCredentials = create<CredentialsState>()(
     },
   ),
 )
+
+export const selectApiUrl = (state: CredentialsState) => state.apiUrl;
+export const selectIdInstance = (state: CredentialsState) => state.idInstance;
+export const selectApiTokenInstance = (state: CredentialsState) => state.apiTokenInstance;
+
+export const selectSetApiUrl = (state: CredentialsState) => state.setApiUrl;
+export const selectSetIdInstance = (state: CredentialsState) => state.setIdInstance;
+export const selectSetApiTokenInstance = (state: CredentialsState) => state.setApiTokenInstance;

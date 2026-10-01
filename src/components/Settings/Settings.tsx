@@ -1,15 +1,23 @@
 import type { FC } from 'react';
 import { Paper, PasswordInput, Stack, TextInput, Title } from '@mantine/core';
-import { useCredentials } from '../../store/credensials.store.ts';
+import {
+  selectApiTokenInstance,
+  selectApiUrl,
+  selectIdInstance,
+  selectSetApiTokenInstance,
+  selectSetApiUrl,
+  selectSetIdInstance,
+  useCredentials,
+} from '../../store/credensials.store.ts';
 
 export const Settings: FC = () => {
 
-  const apiUrl = useCredentials((s) => s.apiUrl);
-  const idInstance = useCredentials((s) => s.idInstance);
-  const apiTokenInstance = useCredentials((s) => s.apiTokenInstance);
-  const setApiUrl = useCredentials((s) => s.setApiUrl);
-  const setIdInstance = useCredentials((s) => s.setIdInstance);
-  const setApiTokenInstance = useCredentials((s) => s.setApiTokenInstance);
+  const apiUrl = useCredentials(selectApiUrl);
+  const idInstance = useCredentials(selectIdInstance);
+  const apiTokenInstance = useCredentials(selectApiTokenInstance);
+  const setApiUrl = useCredentials(selectSetApiUrl);
+  const setIdInstance = useCredentials(selectSetIdInstance);
+  const setApiTokenInstance = useCredentials(selectSetApiTokenInstance);
 
 
   return (
