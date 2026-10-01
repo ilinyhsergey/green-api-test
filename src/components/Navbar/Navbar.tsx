@@ -14,9 +14,8 @@ export const Navbar: FC = () => {
     <nav className={classes.navbar}>
       <div className={classes.wrapper}>
         <div className={classes.aside}>
-
           <Tooltip
-            label={'Chats'}
+            label={'Все чаты'}
             position="right"
             withArrow
             transitionProps={{ duration: 0 }}
@@ -29,14 +28,14 @@ export const Navbar: FC = () => {
                 navigate(selectedChatId ? `/chat/${selectedChatId}` : '/chat');
               }}
               className={classes.mainLink}
-              aria-label={'Chats'}
+              aria-label={'Все чаты'}
             >
               <IconMessage2 size={22} stroke={1.5}/>
             </NavLink>
           </Tooltip>
 
           <Tooltip
-            label={'Settings'}
+            label={'Настройки'}
             position="right"
             withArrow
             transitionProps={{ duration: 0 }}
@@ -45,7 +44,7 @@ export const Navbar: FC = () => {
             <NavLink
               to="/settings"
               className={classes.mainLink}
-              aria-label={'Settings'}
+              aria-label={'Настройки'}
             >
               <IconSettings size={22} stroke={1.5}/>
             </NavLink>

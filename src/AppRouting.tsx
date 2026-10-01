@@ -1,5 +1,5 @@
 import type { FC } from 'react';
-import { BrowserRouter, Route, Routes } from 'react-router';
+import { BrowserRouter, Navigate, Route, Routes } from 'react-router';
 
 import { Settings } from './components/Settings/Settings.tsx';
 import { Chat } from './components/Chat/Chat.tsx';
@@ -9,7 +9,8 @@ export const AppRouter: FC = () => {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<AppRoot />}>
+        <Route path="/" element={<AppRoot/>}>
+          <Route path="" element={<Navigate to="/settings" replace/>}/>
           <Route path="settings" element={<Settings/>}/>
           <Route path="chat" element={<Chat/>}/>
           <Route path="chat/:chatId" element={<Chat/>}/>
