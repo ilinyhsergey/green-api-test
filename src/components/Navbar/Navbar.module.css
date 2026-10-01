@@ -30,15 +30,21 @@
 
 
 
-.title {
-    font-family: Outfit, var(--mantine-font-family);
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--mantine-spacing-xs);
     margin-bottom: var(--mantine-spacing-xl);
     background-color: var(--mantine-color-body);
     padding: var(--mantine-spacing-md);
-    font-weight: 500;
-    padding-top: 18px;
     height: 60px;
     border-bottom: 1px solid light-dark(var(--mantine-color-gray-3), var(--mantine-color-dark-7));
+}
+
+.title {
+    font-family: Outfit, var(--mantine-font-family);
+    font-weight: 500;
 }
 
 .mainLink {

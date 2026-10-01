@@ -1,9 +1,9 @@
 import { type FC, useState } from 'react';
-import { Tooltip } from '@mantine/core';
+import { ActionIcon, Title, Tooltip } from '@mantine/core';
 import classes from './Navbar.module.css';
 import { Chats } from '../Chats/Chats.tsx';
-import { IconMessage2, IconSettings } from '@tabler/icons-react';
-import { NavLink, useNavigate } from 'react-router';
+import { IconMessage2, IconPlus, IconSettings } from '@tabler/icons-react';
+import { Link, NavLink, useNavigate } from 'react-router';
 
 
 export const Navbar: FC = () => {
@@ -52,6 +52,30 @@ export const Navbar: FC = () => {
 
         </div>
         <div className={classes.main}>
+          <div className={classes.header}>
+            <Title order={4} className={classes.title}>
+              Чаты
+            </Title>
+
+            <Tooltip
+              label={'Новый чат'}
+              position="left"
+              withArrow
+              transitionProps={{ duration: 0 }}
+            >
+              <Link to={'/chat/new'}>
+                <ActionIcon
+                  variant="light"
+                  radius="xl"
+                  size="lg"
+                  aria-label={'Новый чат'}
+                >
+                  <IconPlus size={18} stroke={1.5}/>
+                </ActionIcon>
+              </Link>
+            </Tooltip>
+          </div>
+
           <Chats
             setSelectedChatId={(chatId) => setSelectedChatId(chatId)}
           />
