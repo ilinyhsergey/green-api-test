@@ -6,3 +6,9 @@ export interface GetContactsResponse {
   type: string;
   [property: string]: any;
 }
+
+export interface GetChatResponse {
+  chatId: string;
+  phoneNumber: number;
+  [property: string]: any;
+}
