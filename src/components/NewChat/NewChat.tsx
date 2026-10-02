@@ -1,12 +1,25 @@
 import { type FC, type SubmitEvent, useState } from 'react';
 import { Button, Paper, Stack, TextInput, Title } from '@mantine/core';
+import { useMutation } from '@tanstack/react-query';
+import { useApiCredentials } from '../../store/credensials.store.ts';
+import { QueryKeys } from '../../api/query-keys.ts';
+import { useNavigate } from 'react-router';
+import type { CheckAccountResponse } from '../../api/api-schema.ts';
+import type { CheckAccountArguments } from '../../api/api.types.ts';
 
 const PHONE_REGEX = /^\+?[1-9]\d{1,14}$/;
 
 export const NewChat: FC = () => {
+  const navigate = useNavigate();
+  const credentials = useApiCredentials();
+  const checkAccountMutation = useMutation<CheckAccountResponse, unknown, CheckAccountArguments, unknown>({
+    mutationKey: [QueryKeys.addChat],
+  });
+
+  const { isPending, isError, isSuccess } = checkAccountMutation;
 
   const [phone, setPhone] = useState('');
-  const [error, setError] = useState<string | null>(null);
+  const [validationError, setValidationError] = useState<string | null>(null);
 
   const handleSubmit = (event: SubmitEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -14,14 +27,24 @@ export const NewChat: FC = () => {
     const normalized = phone.trim().replace(/[\s()-]/g, '');
 
     if (!PHONE_REGEX.test(normalized)) {
-      setError('Введите номер телефона в международном формате, например +79991234567');
+      setValidationError('Введите номер телефона в международном формате, например +79991234567');
       return;
     }
 
-    setError(null);
+    setValidationError(null);
 
-    const result = normalized.replace(/^\+/, '');
-    console.log('__result :',result ); // todo
+    const phoneNumber = normalized.replace(/^\+/, '');
+
+    checkAccountMutation.mutateAsync({
+      request: { phoneNumber: +phoneNumber },
+      credentials,
+    })
+      .then(({ chatId, exist }) => {
+        if (exist) {
+          navigate(`/chat/${chatId}`);
+        }
+      });
+
   };
 
   return (
@@ -34,16 +57,16 @@ export const NewChat: FC = () => {
           label="Номер телефона"
           placeholder="+79991234567"
           value={phone}
-          error={error}
+          error={validationError}
           onChange={(event) => {
             setPhone(event.currentTarget.value);
-            if (error) {
-              setError(null);
+            if (validationError) {
+              setValidationError(null);
             }
           }}
         />
 
-        <Button type="submit" disabled={!!error}>Создать чат</Button>
+        <Button type="submit" disabled={isError || isPending || isSuccess}>Создать чат</Button>
       </Stack>
     </Paper>
   );

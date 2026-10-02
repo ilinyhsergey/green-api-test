@@ -12,3 +12,17 @@ export interface GetChatResponse {
   phoneNumber: number;
   [property: string]: any;
 }
+
+export interface CheckAccountRequest {
+  phoneNumber: number;
+  [property: string]: any;
+}
+
+export interface CheckAccountResponse {
+  chatId: string;
+  exist: boolean;
+  fromCache: boolean;
+  phoneNumber: number;
+  username: string;
+  [property: string]: any;
+}

@@ -4,6 +4,7 @@ import { NavLink } from 'react-router';
 import { useQuery } from '@tanstack/react-query';
 import { getChats } from '../../api/api.ts';
 import { useApiCredentials } from '../../store/credensials.store.ts';
+import { QueryKeys } from '../../api/query-keys.ts';
 
 export interface ChatsProps {
   setSelectedChatId?: (chatId: string) => void;
@@ -11,10 +12,8 @@ export interface ChatsProps {
 
 export const Chats: FC<ChatsProps> = ({ setSelectedChatId }) => {
 
-  const credentialsState = useApiCredentials();
-
   const chatsQuery = useQuery({
-    queryKey: ['contacts', credentialsState],
+    queryKey: [QueryKeys.chats, useApiCredentials()],
     queryFn: getChats,
   });
   const { isPending, isError, data, error } = chatsQuery;
@@ -24,13 +23,11 @@ export const Chats: FC<ChatsProps> = ({ setSelectedChatId }) => {
   }
 
   if (isError) {
-    console.error('__ error:', error); // todo
+    console.error('__ error:', error);
     return '---'; // todo
   }
 
-  console.log('__ data:', data); // todo
-
-  const links = data.data.map(({chatId, phoneNumber}) => (
+  const links = data.map(({chatId, phoneNumber}) => (
     <NavLink
       to={`/chat/${chatId}`}
       className={({ isActive }) => (isActive ? `${classes.link} ${classes.active}` : classes.link)}

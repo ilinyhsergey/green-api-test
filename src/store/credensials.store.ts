@@ -29,6 +29,7 @@ export const useApiUrl = () => useCredentialsStore(selectApiUrl);
 export const useIdInstance = () => useCredentialsStore(selectIdInstance);
 export const useApiTokenInstance = () => useCredentialsStore(selectApiTokenInstance);
 export const useApiCredentials = () => useCredentialsStore((s) => s);
+export const getCredentials = (): CredentialsState => useCredentialsStore.getState();
 
 export const setApiUrl = (apiUrl: string) => {
   useCredentialsStore.setState({ apiUrl });
