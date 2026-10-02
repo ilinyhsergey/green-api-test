@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
-interface CredentialsState {
+export interface CredentialsState {
   apiUrl: string;
   idInstance: string;
   apiTokenInstance: string;
@@ -28,6 +28,7 @@ const selectApiTokenInstance = (state: CredentialsState) => state.apiTokenInstan
 export const useApiUrl = () => useCredentialsStore(selectApiUrl);
 export const useIdInstance = () => useCredentialsStore(selectIdInstance);
 export const useApiTokenInstance = () => useCredentialsStore(selectApiTokenInstance);
+export const useApiCredentials = () => useCredentialsStore((s) => s);
 
 export const setApiUrl = (apiUrl: string) => {
   useCredentialsStore.setState({ apiUrl });
