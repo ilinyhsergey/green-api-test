@@ -90,11 +90,12 @@ export const sendMessage = async (request: SendMessageRequest) => {
   return response.data;
 };
 
-export const receiveNotification = async () => {
+export const receiveNotification = async (signal?: AbortSignal) => {
   const { apiUrl, idInstance, apiTokenInstance } = getCredentials();
   const seconds = 30; // todo только для разработки
-  const response = await axios.get<NotificationResponse>(
+  const response = await axios.get<NotificationResponse | null>(
     `${apiUrl}/waInstance${idInstance}/receiveNotification/${apiTokenInstance}?receiveTimeout=${seconds}`,
+    { signal },
   );
   return response.data;
 };

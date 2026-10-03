@@ -1,6 +1,6 @@
 import { QueryClient } from '@tanstack/react-query';
-import { checkAccount, sendMessage } from './api.ts';
-import type { GetChatResponse, IncomingMessagesResponse } from './api-schema.ts';
+import { checkAccount, deleteNotification, receiveNotification, sendMessage } from './api.ts';
+import type { BaseMessagesResponse, GetChatResponse } from './api-schema.ts';
 import { QueryKeys } from './query-keys.ts';
 
 export const initializeQueryClient = (queryClient: QueryClient): QueryClient => {
@@ -32,7 +32,7 @@ export const initializeQueryClient = (queryClient: QueryClient): QueryClient => 
       await context.client.cancelQueries({ queryKey: [QueryKeys.lastMessages] });
 
       const timestampInSeconds = Math.floor(Date.now().valueOf() / 1000);
-      const optimisticMessage: IncomingMessagesResponse = {
+      const optimisticMessage: BaseMessagesResponse = {
         chatId,
         textMessage: message,
         timestamp: timestampInSeconds,
@@ -43,14 +43,14 @@ export const initializeQueryClient = (queryClient: QueryClient): QueryClient => 
         senderType: 'user',
       };
 
-      context.client.setQueryData([QueryKeys.lastMessages], (old: IncomingMessagesResponse[]) => {
+      context.client.setQueryData([QueryKeys.lastMessages], (old: BaseMessagesResponse[]) => {
         return [...(old ?? []), optimisticMessage];
       });
 
       return { optimisticMessage };
     },
     onSuccess: (result, _variables, onMutateResult, context) => {
-      context.client.setQueryData([QueryKeys.lastMessages], (old: IncomingMessagesResponse[]) => {
+      context.client.setQueryData([QueryKeys.lastMessages], (old: BaseMessagesResponse[]) => {
         return (old ?? []).map((message) =>
           (message.chatId === onMutateResult.optimisticMessage.chatId && message.textMessage === onMutateResult.optimisticMessage.textMessage)
             ? { ...message, idMessage: result.idMessage }
@@ -63,11 +63,58 @@ export const initializeQueryClient = (queryClient: QueryClient): QueryClient => 
         return;
       }
 
-      context.client.setQueryData([QueryKeys.lastMessages], (old: IncomingMessagesResponse[]) =>
+      context.client.setQueryData([QueryKeys.lastMessages], (old: BaseMessagesResponse[]) =>
         old.filter((message) =>
           !(message.chatId === onMutateResult.optimisticMessage.chatId && message.textMessage === onMutateResult.optimisticMessage.textMessage),
         ),
       );
+    },
+  });
+
+  queryClient.setQueryDefaults([QueryKeys.notification], {
+    queryFn: async ({ signal, client }) => {
+      const notification = await receiveNotification(signal);
+
+      if (!notification) {
+        return null;
+      }
+
+      client.setQueryData([QueryKeys.lastMessages], (old: BaseMessagesResponse[] | undefined) => {
+        const {
+          typeWebhook,
+          timestamp,
+          idMessage,
+          senderData,
+          messageData,
+        } = notification.body;
+        const {
+          chatId,
+        } = senderData;
+        const textMessage = messageData.textMessageData.textMessage;
+
+        const type = (typeWebhook === 'incomingMessageReceived')
+          ? 'incoming'
+          : (typeWebhook === 'outgoingMessageReceived')
+            ? 'outgoing'
+            : undefined;
+
+
+        const message: BaseMessagesResponse = {
+          chatId,
+          idMessage,
+          textMessage,
+          timestamp,
+          type,
+          chatType: '',
+          forwardingScore: 0,
+          isForwarded: false,
+        };
+        return [...(old ?? []), message];
+      });
+
+      await deleteNotification(notification.receiptId);
+
+      return notification;
     },
   });
 

@@ -4,6 +4,7 @@ export const QueryKeys = Object.freeze({
   currentContactInfo: 'currentContactInfo',
   lastMessages: 'lastMessages',
   sendMessage: 'sendMessage',
+  notification: 'notification',
 } as const);
 
 export type QueryKeys = typeof QueryKeys[keyof typeof QueryKeys];
