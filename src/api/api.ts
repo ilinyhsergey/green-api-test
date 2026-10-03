@@ -105,7 +105,7 @@ export const sendMessage = async (request: SendMessageRequest) => {
 
 export const receiveNotification = async (signal?: AbortSignal) => {
   const { apiUrl, idInstance, apiTokenInstance } = requireCredentials();
-  const seconds = 30; // todo только для разработки
+  const seconds = 5;
   const response = await axios.get<NotificationResponse | null>(
     `${apiUrl}/waInstance${idInstance}/receiveNotification/${apiTokenInstance}?receiveTimeout=${seconds}`,
     { signal },

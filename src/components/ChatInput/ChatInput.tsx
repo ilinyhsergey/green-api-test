@@ -41,8 +41,7 @@ export const ChatInput: FC<ChatInputProps> = ({ maxHeight }) => {
     };
 
     sendMessageMutation.mutateAsync(request)
-      .then((response) => {
-        console.log('__ response:', response); // todo
+      .then(() => {
         setMessageText('');
       });
   };
