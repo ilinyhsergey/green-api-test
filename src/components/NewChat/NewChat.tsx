@@ -1,18 +1,15 @@
 import { type FC, type SubmitEvent, useState } from 'react';
 import { Button, Paper, Stack, TextInput, Title } from '@mantine/core';
 import { useMutation } from '@tanstack/react-query';
-import { useApiCredentials } from '../../store/credensials.store.ts';
 import { QueryKeys } from '../../api/query-keys.ts';
 import { useNavigate } from 'react-router';
-import type { CheckAccountResponse } from '../../api/api-schema.ts';
-import type { CheckAccountArguments } from '../../api/api.types.ts';
+import type { CheckAccountRequest, CheckAccountResponse } from '../../api/api-schema.ts';
 
 const PHONE_REGEX = /^\+?[1-9]\d{1,14}$/;
 
 export const NewChat: FC = () => {
   const navigate = useNavigate();
-  const credentials = useApiCredentials();
-  const checkAccountMutation = useMutation<CheckAccountResponse, unknown, CheckAccountArguments, unknown>({
+  const checkAccountMutation = useMutation<CheckAccountResponse, unknown, CheckAccountRequest, unknown>({
     mutationKey: [QueryKeys.addChat],
   });
 
@@ -35,10 +32,7 @@ export const NewChat: FC = () => {
 
     const phoneNumber = normalized.replace(/^\+/, '');
 
-    checkAccountMutation.mutateAsync({
-      request: { phoneNumber: +phoneNumber },
-      credentials,
-    })
+    checkAccountMutation.mutateAsync({ phoneNumber: +phoneNumber })
       .then(({ chatId, exist }) => {
         if (exist) {
           navigate(`/chat/${chatId}`);

@@ -1,11 +1,9 @@
 import axios from 'axios';
-import { type CredentialsState } from '../store/credensials.store.ts';
-import type { CheckAccountResponse, GetChatResponse, GetContactsResponse } from './api-schema.ts';
-import type { CheckAccountArguments } from './api.types.ts';
+import { getCredentials } from '../store/credensials.store.ts';
+import type { CheckAccountRequest, CheckAccountResponse, GetChatResponse, GetContactsResponse } from './api-schema.ts';
 
-export const getContacts = async ({ queryKey }): Promise<GetContactsResponse[]> => {
-  const [, credentials] = queryKey as [unknown, CredentialsState];
-  const { apiUrl, idInstance, apiTokenInstance } = credentials; // todo возьми здесь из хранилища
+export const getContacts = async (): Promise<GetContactsResponse[]> => {
+  const { apiUrl, idInstance, apiTokenInstance } = getCredentials();
 
   const response = await axios.get<GetContactsResponse[]>(
     `${apiUrl}/waInstance${idInstance}/getContacts/${apiTokenInstance}`,
@@ -13,9 +11,8 @@ export const getContacts = async ({ queryKey }): Promise<GetContactsResponse[]> 
   return response.data;
 };
 
-export const getChats = async ({ queryKey }): Promise<GetChatResponse[]> => {
-  const [, credentials] = queryKey as [unknown, CredentialsState];
-  const { apiUrl, idInstance, apiTokenInstance } = credentials; // todo возьми здесь из хранилища
+export const getChats = async (): Promise<GetChatResponse[]> => {
+  const { apiUrl, idInstance, apiTokenInstance } = getCredentials();
 
   const response = await axios.get<GetChatResponse[]>(
     `${apiUrl}/waInstance${idInstance}/getChats/${apiTokenInstance}`,
@@ -23,10 +20,9 @@ export const getChats = async ({ queryKey }): Promise<GetChatResponse[]> => {
   return response.data;
 };
 
-export const checkAccount = async (
-  { request, credentials }: CheckAccountArguments,
-): Promise<CheckAccountResponse> => {
-  const { apiUrl, idInstance, apiTokenInstance } = credentials; // todo возьми здесь из хранилища
+export const checkAccount = async (request: CheckAccountRequest): Promise<CheckAccountResponse> => {
+  const { apiUrl, idInstance, apiTokenInstance } = getCredentials();
+
   const response = await axios.post<CheckAccountResponse>(
     `${apiUrl}/waInstance${idInstance}/checkAccount/${apiTokenInstance}`,
     request,

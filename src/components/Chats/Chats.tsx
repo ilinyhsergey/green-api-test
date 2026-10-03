@@ -3,7 +3,6 @@ import classes from './Chats.module.css';
 import { NavLink } from 'react-router';
 import { useQuery } from '@tanstack/react-query';
 import { getChats } from '../../api/api.ts';
-import { useApiCredentials } from '../../store/credensials.store.ts';
 import { QueryKeys } from '../../api/query-keys.ts';
 
 export interface ChatsProps {
@@ -13,7 +12,7 @@ export interface ChatsProps {
 export const Chats: FC<ChatsProps> = ({ setSelectedChatId }) => {
 
   const chatsQuery = useQuery({
-    queryKey: [QueryKeys.chats, useApiCredentials()],
+    queryKey: [QueryKeys.chats],
     queryFn: getChats,
   });
   const { isPending, isError, data, error } = chatsQuery;
