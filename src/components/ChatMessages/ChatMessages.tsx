@@ -9,7 +9,6 @@ import { PageError } from '../PageError/PageError.tsx';
 import { PageLoader } from '../PageLoader/PageLoader.tsx';
 import { ChatMessage } from '../ChatMessage/ChatMessage.tsx';
 
-const NOTIFICATION_ERROR_DELAY = 5000;
 
 export const ChatMessages: FC = () => {
   const params = useParams();
@@ -19,17 +18,6 @@ export const ChatMessages: FC = () => {
     queryFn: getLastMessages,
   });
   const { isPending, isError, data, refetch } = lastIncomingMessagesQuery;
-
-  useQuery({
-    queryKey: [QueryKeys.notification],
-    refetchInterval: (query) => {
-      if (query.state.fetchStatus === 'fetching') {
-        return false;
-      }
-      return query.state.status === 'error' ? NOTIFICATION_ERROR_DELAY : 1;
-    },
-    refetchIntervalInBackground: true,
-  });
 
   if (isPending) {
     return <PageLoader/>;

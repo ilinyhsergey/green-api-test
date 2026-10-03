@@ -81,23 +81,25 @@ export const initializeQueryClient = (queryClient: QueryClient): QueryClient => 
 
       client.setQueryData([QueryKeys.lastMessages], (old: BaseMessagesResponse[] | undefined) => {
         const {
-          typeWebhook,
           timestamp,
           idMessage,
           senderData,
           messageData,
         } = notification.body;
-        const {
-          chatId,
-        } = senderData;
-        const textMessage = messageData.textMessageData.textMessage;
 
+        const isAlreadyInChat = (old ?? []).some((message) => message.idMessage === idMessage);
+        if (isAlreadyInChat) {
+          return old;
+        }
+
+        const chatId = senderData?.chatId ?? notification.body.chatId;
+        const textMessage = messageData?.textMessageData?.textMessage;
+        const typeWebhook = notification.body.typeWebhook;
         const type = (typeWebhook === 'incomingMessageReceived')
           ? 'incoming'
           : (typeWebhook === 'outgoingMessageReceived')
             ? 'outgoing'
             : undefined;
-
 
         const message: BaseMessagesResponse = {
           chatId,
