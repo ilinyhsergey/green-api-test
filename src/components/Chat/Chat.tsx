@@ -1,15 +1,9 @@
 import { type FC, type SubmitEvent, useState } from 'react';
-import { ActionIcon, Avatar, Box, Group, Paper, ScrollArea, Stack, Text, Textarea } from '@mantine/core';
+import { ActionIcon, Box, Paper, ScrollArea, Stack, Text, Textarea } from '@mantine/core';
 import { useElementSize } from '@mantine/hooks';
-import { IconDotsVertical, IconSend } from '@tabler/icons-react';
+import { IconSend } from '@tabler/icons-react';
 import classes from './Chat.module.css';
-import { getContactInfo } from '../../api/api.ts';
-import { QueryKeys } from '../../api/query-keys.ts';
-import { useQuery } from '@tanstack/react-query';
-import { useParams } from 'react-router';
-import { formatTime } from '../../shared/lib/format-time.ts';
-import { PageLoader } from '../PageLoader/PageLoader.tsx';
-import { PageError } from '../PageError/PageError.tsx';
+import { ChatHeader } from '../ChatHeader/ChatHeader.tsx';
 
 interface Message { // todo remove it
   id: string;
@@ -26,14 +20,6 @@ const MOCK_MESSAGES: Message[] = [ // todo remove it
 ];
 
 export const Chat: FC = () => {
-  const params = useParams();
-
-  const contactInfo = useQuery({
-    queryKey: [QueryKeys.currentContactInfo, { chatId: params.chatId }],
-    queryFn: getContactInfo,
-  });
-  const { isPending, isError, data, refetch } = contactInfo;
-
   const [messageText, setMessageText] = useState('');
   const { ref: chatRef, height: chatHeight } = useElementSize();
   const footerMaxHeight = chatHeight ? chatHeight / 3 : undefined;
@@ -43,31 +29,9 @@ export const Chat: FC = () => {
     setMessageText('');
   };
 
-  if (isPending) {
-    return <PageLoader/>;
-  }
-
-  if (isError) {
-    return <PageError onRetry={() => refetch()}/>;
-  }
-
   return (
     <div className={classes.chat} ref={chatRef}>
-      <div className={classes.header}>
-        <Group gap="sm">
-          <Avatar src={data?.avatar} radius="xl"/>
-          <Stack gap={0}>
-            <Text fw={500}>{data?.contactName}</Text>
-            {!!data?.lastSeen &&
-              <Text size="xs" c="dimmed">был(а) в сети {formatTime(data?.lastSeen)}</Text>
-            }
-          </Stack>
-        </Group>
-
-        <ActionIcon variant="subtle" size="lg" aria-label="Меню чата">
-          <IconDotsVertical size={20} stroke={1.5}/>
-        </ActionIcon>
-      </div>
+      <ChatHeader/>
 
       <ScrollArea className={classes.body} classNames={{ content: classes.bodyContent }} offsetScrollbars>
         <Stack className={classes.messages} gap="xs" py="md">
