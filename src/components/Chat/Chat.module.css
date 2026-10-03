@@ -21,6 +21,16 @@
     min-height: 0;
 }
 
+.bodyContent {
+    display: flex;
+    flex-direction: column;
+    min-height: 100%;
+}
+
+.messages {
+    margin-top: auto;
+}
+
 .messageRow {
     display: flex;
 }

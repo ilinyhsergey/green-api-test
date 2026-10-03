@@ -1,4 +1,4 @@
-import { type FC, type FormEvent, useState } from 'react';
+import { type FC, type SubmitEvent, useState } from 'react';
 import { ActionIcon, Avatar, Box, Group, Paper, ScrollArea, Stack, Text, Textarea } from '@mantine/core';
 import { useElementSize } from '@mantine/hooks';
 import { IconDotsVertical, IconSend } from '@tabler/icons-react';
@@ -38,7 +38,7 @@ export const Chat: FC = () => {
   const { ref: chatRef, height: chatHeight } = useElementSize();
   const footerMaxHeight = chatHeight ? chatHeight / 3 : undefined;
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = (event: SubmitEvent) => {
     event.preventDefault();
     setMessageText('');
   };
@@ -69,8 +69,8 @@ export const Chat: FC = () => {
         </ActionIcon>
       </div>
 
-      <ScrollArea className={classes.body} offsetScrollbars>
-        <Stack gap="xs" py="md">
+      <ScrollArea className={classes.body} classNames={{ content: classes.bodyContent }} offsetScrollbars>
+        <Stack className={classes.messages} gap="xs" py="md">
           {MOCK_MESSAGES.map(({ id, text, time, fromMe }) => (
             <Box key={id} className={`${classes.messageRow} ${fromMe ? classes.outgoing : classes.incoming}`}>
               <Paper
