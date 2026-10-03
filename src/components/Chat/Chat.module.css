@@ -1,0 +1,46 @@
+.chat {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--mantine-spacing-sm);
+    padding-bottom: var(--mantine-spacing-md);
+    border-bottom: 1px solid light-dark(var(--mantine-color-gray-3), var(--mantine-color-dark-4));
+}
+
+.body {
+    flex: 1;
+    min-height: 0;
+}
+
+.messageRow {
+    display: flex;
+}
+
+.incoming {
+    justify-content: flex-start;
+}
+
+.outgoing {
+    justify-content: flex-end;
+}
+
+.bubble {
+    max-width: 70%;
+}
+
+.footer {
+    display: flex;
+    align-items: center;
+    gap: var(--mantine-spacing-sm);
+    padding-top: var(--mantine-spacing-md);
+}
+
+.input {
+    flex: 1;
+}
