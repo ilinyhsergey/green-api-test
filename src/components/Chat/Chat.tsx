@@ -9,6 +9,7 @@ import { useQuery } from '@tanstack/react-query';
 import { useParams } from 'react-router';
 import { formatTime } from '../../shared/lib/format-time.ts';
 import { PageLoader } from '../PageLoader/PageLoader.tsx';
+import { PageError } from '../PageError/PageError.tsx';
 
 interface Message { // todo remove it
   id: string;
@@ -31,7 +32,7 @@ export const Chat: FC = () => {
     queryKey: [QueryKeys.currentContactInfo, { chatId: params.chatId }],
     queryFn: getContactInfo,
   });
-  const { isPending, isError, data, error } = contactInfo;
+  const { isPending, isError, data, refetch } = contactInfo;
 
   const [messageText, setMessageText] = useState('');
   const { ref: chatRef, height: chatHeight } = useElementSize();
@@ -47,7 +48,7 @@ export const Chat: FC = () => {
   }
 
   if (isError) {
-    return error;
+    return <PageError onRetry={() => refetch()}/>;
   }
 
   return (
