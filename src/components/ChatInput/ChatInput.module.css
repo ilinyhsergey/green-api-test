@@ -1,0 +1,11 @@
+.footer {
+    flex: 0 0 auto;
+    display: flex;
+    align-items: flex-end;
+    gap: var(--mantine-spacing-sm);
+    padding-top: var(--mantine-spacing-md);
+}
+
+.input {
+    flex: 1;
+}
