@@ -8,6 +8,7 @@ import { QueryKeys } from '../../api/query-keys.ts';
 import { useQuery } from '@tanstack/react-query';
 import { useParams } from 'react-router';
 import { formatTime } from '../../shared/lib/format-time.ts';
+import { PageLoader } from '../PageLoader/PageLoader.tsx';
 
 interface Message { // todo remove it
   id: string;
@@ -40,6 +41,14 @@ export const Chat: FC = () => {
     event.preventDefault();
     setMessageText('');
   };
+
+  if (isPending) {
+    return <PageLoader/>;
+  }
+
+  if (isError) {
+    return error;
+  }
 
   return (
     <div className={classes.chat} ref={chatRef}>
