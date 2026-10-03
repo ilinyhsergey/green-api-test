@@ -1,0 +1,30 @@
+.body {
+    flex: 1;
+    min-height: 0;
+}
+
+.bodyContent {
+    display: flex;
+    flex-direction: column;
+    min-height: 100%;
+}
+
+.messages {
+    margin-top: auto;
+}
+
+.messageRow {
+    display: flex;
+}
+
+.incoming {
+    justify-content: flex-start;
+}
+
+.outgoing {
+    justify-content: flex-end;
+}
+
+.bubble {
+    max-width: 70%;
+}
