@@ -7,9 +7,11 @@ import type {
   GetContactInfoRequest,
   GetContactInfoResponse,
   GetContactsResponse,
+  LastIncomingMessagesRequest,
+  LastIncomingMessagesResponse,
 } from './api-schema.ts';
 
-export const getContacts = async (): Promise<GetContactsResponse[]> => {
+export const getContacts = async () => {
   const { apiUrl, idInstance, apiTokenInstance } = getCredentials();
 
   const response = await axios.get<GetContactsResponse[]>(
@@ -18,7 +20,7 @@ export const getContacts = async (): Promise<GetContactsResponse[]> => {
   return response.data;
 };
 
-export const getChats = async (): Promise<GetChatResponse[]> => {
+export const getChats = async () => {
   const { apiUrl, idInstance, apiTokenInstance } = getCredentials();
 
   const response = await axios.get<GetChatResponse[]>(
@@ -27,7 +29,7 @@ export const getChats = async (): Promise<GetChatResponse[]> => {
   return response.data;
 };
 
-export const getContactInfo = async ({ queryKey }): Promise<GetContactInfoResponse> => {
+export const getContactInfo = async ({ queryKey }) => {
   const [, data] = queryKey as [unknown, GetContactInfoRequest];
   const { apiUrl, idInstance, apiTokenInstance } = getCredentials();
 
@@ -38,12 +40,22 @@ export const getContactInfo = async ({ queryKey }): Promise<GetContactInfoRespon
   return response.data;
 };
 
-export const checkAccount = async (request: CheckAccountRequest): Promise<CheckAccountResponse> => {
+export const checkAccount = async (request: CheckAccountRequest) => {
   const { apiUrl, idInstance, apiTokenInstance } = getCredentials();
 
   const response = await axios.post<CheckAccountResponse>(
     `${apiUrl}/waInstance${idInstance}/checkAccount/${apiTokenInstance}`,
     request,
+  );
+  return response.data;
+};
+
+export const getLastIncomingMessages = async ({ queryKey }) => {
+  const [, data] = queryKey as [unknown, LastIncomingMessagesRequest];
+  const { apiUrl, idInstance, apiTokenInstance } = getCredentials();
+  const response = await axios.get<LastIncomingMessagesResponse[]>(
+    `${apiUrl}/waInstance${idInstance}/lastIncomingMessages/${apiTokenInstance}`,
+    { data },
   );
   return response.data;
 };

@@ -48,3 +48,31 @@ export interface GetContactInfoResponse {
   username: string;
   [property: string]: any;
 }
+
+export interface LastIncomingMessagesRequest {
+  /**
+   * Время в минутах
+   */
+  minutes: string;
+  [property: string]: any;
+}
+export interface LastIncomingMessagesResponse {
+  chatId?: string;
+  chatType:string;
+  deletedMessageId?: string;
+  editedMessageId?: string;
+  forwardingScore:number;
+  idMessage?: string;
+  isDeleted?: boolean;
+  isEdited?: boolean;
+  isForwarded:boolean;
+  senderContactName?: string;
+  senderId?: string;
+  senderName?: string;
+  senderType:string;
+  textMessage?: string;
+  timestamp?: number;
+  type?: string;
+  typeMessage?: string;
+  [property: string]: any;
+}
