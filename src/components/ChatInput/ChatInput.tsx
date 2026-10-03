@@ -1,4 +1,4 @@
-import { type FC, type SubmitEvent, useState } from 'react';
+import { type FC, type KeyboardEvent, type SubmitEvent, useState } from 'react';
 import { ActionIcon, Textarea } from '@mantine/core';
 import { IconSend } from '@tabler/icons-react';
 import classes from './ChatInput.module.css';
@@ -47,6 +47,22 @@ export const ChatInput: FC<ChatInputProps> = ({ maxHeight }) => {
       });
   };
 
+  const handleKeyDown = (event: KeyboardEvent<HTMLTextAreaElement>) => {
+    const hasModifiers = event.shiftKey || event.ctrlKey || event.altKey || event.metaKey;
+
+    if (event.key !== 'Enter' || hasModifiers || event.nativeEvent.isComposing) {
+      return;
+    }
+
+    event.preventDefault();
+
+    if (isPending || isError) {
+      return;
+    }
+
+    event.currentTarget.form?.requestSubmit();
+  };
+
   return (
     <form className={classes.footer} onSubmit={handleSubmit}>
       <Textarea
@@ -56,6 +72,7 @@ export const ChatInput: FC<ChatInputProps> = ({ maxHeight }) => {
         placeholder="Напишите сообщение..."
         value={messageText}
         onChange={(event) => setMessageText(event.currentTarget.value)}
+        onKeyDown={handleKeyDown}
         styles={{ input: { maxHeight, overflowY: 'auto' } }}
       />
       <ActionIcon
