@@ -1,4 +1,5 @@
 import axios from 'axios';
+import type { QueryFunctionContext } from '@tanstack/react-query';
 import { getCredentials } from '../store/credensials.store.ts';
 import type {
   CheckAccountRequest,
@@ -16,8 +17,20 @@ import type {
   SendMessageResponse,
 } from './api-schema.ts';
 
+// без параметров подключения запрос уходит на относительный адрес и получает index.html вместо данных
+const requireCredentials = () => {
+  const credentials = getCredentials();
+  const { apiUrl, idInstance, apiTokenInstance } = credentials;
+
+  if (!apiUrl || !idInstance || !apiTokenInstance) {
+    throw new Error('Не заданы параметры подключения к API');
+  }
+
+  return credentials;
+};
+
 export const getContacts = async () => {
-  const { apiUrl, idInstance, apiTokenInstance } = getCredentials();
+  const { apiUrl, idInstance, apiTokenInstance } = requireCredentials();
 
   const response = await axios.get<GetContactsResponse[]>(
     `${apiUrl}/waInstance${idInstance}/getContacts/${apiTokenInstance}`,
@@ -26,7 +39,7 @@ export const getContacts = async () => {
 };
 
 export const getChats = async () => {
-  const { apiUrl, idInstance, apiTokenInstance } = getCredentials();
+  const { apiUrl, idInstance, apiTokenInstance } = requireCredentials();
 
   const response = await axios.get<GetChatResponse[]>(
     `${apiUrl}/waInstance${idInstance}/getChats/${apiTokenInstance}`,
@@ -34,9 +47,9 @@ export const getChats = async () => {
   return response.data;
 };
 
-export const getContactInfo = async ({ queryKey }) => {
+export const getContactInfo = async ({ queryKey }: QueryFunctionContext) => {
   const [, data] = queryKey as [unknown, GetContactInfoRequest];
-  const { apiUrl, idInstance, apiTokenInstance } = getCredentials();
+  const { apiUrl, idInstance, apiTokenInstance } = requireCredentials();
 
   const response = await axios.post<GetContactInfoResponse>(
     `${apiUrl}/waInstance${idInstance}/getContactInfo/${apiTokenInstance}`,
@@ -46,7 +59,7 @@ export const getContactInfo = async ({ queryKey }) => {
 };
 
 export const checkAccount = async (request: CheckAccountRequest) => {
-  const { apiUrl, idInstance, apiTokenInstance } = getCredentials();
+  const { apiUrl, idInstance, apiTokenInstance } = requireCredentials();
 
   const response = await axios.post<CheckAccountResponse>(
     `${apiUrl}/waInstance${idInstance}/checkAccount/${apiTokenInstance}`,
@@ -55,9 +68,9 @@ export const checkAccount = async (request: CheckAccountRequest) => {
   return response.data;
 };
 
-export const getLastMessages = async ({ queryKey }) => {
+export const getLastMessages = async () => {
   const data: LastMessagesRequest = { minutes: '10080' };
-  const { apiUrl, idInstance, apiTokenInstance } = getCredentials();
+  const { apiUrl, idInstance, apiTokenInstance } = requireCredentials();
 
 
   const incomingPromise = axios.get<IncomingMessagesResponse[]>(
@@ -81,7 +94,7 @@ export const getLastMessages = async ({ queryKey }) => {
 };
 
 export const sendMessage = async (request: SendMessageRequest) => {
-  const { apiUrl, idInstance, apiTokenInstance } = getCredentials();
+  const { apiUrl, idInstance, apiTokenInstance } = requireCredentials();
 
   const response = await axios.post<SendMessageResponse>(
     `${apiUrl}/waInstance${idInstance}/sendMessage/${apiTokenInstance}`,
@@ -91,7 +104,7 @@ export const sendMessage = async (request: SendMessageRequest) => {
 };
 
 export const receiveNotification = async (signal?: AbortSignal) => {
-  const { apiUrl, idInstance, apiTokenInstance } = getCredentials();
+  const { apiUrl, idInstance, apiTokenInstance } = requireCredentials();
   const seconds = 30; // todo только для разработки
   const response = await axios.get<NotificationResponse | null>(
     `${apiUrl}/waInstance${idInstance}/receiveNotification/${apiTokenInstance}?receiveTimeout=${seconds}`,
@@ -101,7 +114,7 @@ export const receiveNotification = async (signal?: AbortSignal) => {
 };
 
 export const deleteNotification = async (receiptId: number) => {
-  const { apiUrl, idInstance, apiTokenInstance } = getCredentials();
+  const { apiUrl, idInstance, apiTokenInstance } = requireCredentials();
   const response = await axios.get<DeleteNotificationResponse>(
     `${apiUrl}/waInstance${idInstance}/deleteNotification/${apiTokenInstance}/${receiptId}`,
   );

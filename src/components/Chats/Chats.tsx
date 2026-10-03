@@ -5,20 +5,23 @@ import { useQuery } from '@tanstack/react-query';
 import { getChats } from '../../api/api.ts';
 import { QueryKeys } from '../../api/query-keys.ts';
 import { Progress } from '@mantine/core';
+import { useHasCredentials } from '../../store/credensials.store.ts';
 
 export interface ChatsProps {
   setSelectedChatId?: (chatId: string) => void;
 }
 
 export const Chats: FC<ChatsProps> = ({ setSelectedChatId }) => {
+  const hasCredentials = useHasCredentials();
 
   const chatsQuery = useQuery({
     queryKey: [QueryKeys.chats],
     queryFn: getChats,
+    enabled: hasCredentials,
   });
-  const { isPending, isError, data, error } = chatsQuery;
+  const { isLoading, isError, data, error } = chatsQuery;
 
-  if (isPending) {
+  if (isLoading) {
     return <Progress value={100} animated size="xs"/>;
   }
 
@@ -27,7 +30,7 @@ export const Chats: FC<ChatsProps> = ({ setSelectedChatId }) => {
     return '';
   }
 
-  const links = data.map(({chatId, phoneNumber}) => (
+  const links = (data ??  []).map(({chatId, phoneNumber}) => (
     <NavLink
       to={`/chat/${chatId}`}
       className={({ isActive }) => (isActive ? `${classes.link} ${classes.active}` : classes.link)}

@@ -24,11 +24,14 @@ const useCredentialsStore = create<CredentialsState>()(
 const selectApiUrl = (state: CredentialsState) => state.apiUrl;
 const selectIdInstance = (state: CredentialsState) => state.idInstance;
 const selectApiTokenInstance = (state: CredentialsState) => state.apiTokenInstance;
+const selectHasCredentials = ({ apiUrl, idInstance, apiTokenInstance }: CredentialsState) =>
+  !!apiUrl && !!idInstance && !!apiTokenInstance;
 
 export const useApiUrl = () => useCredentialsStore(selectApiUrl);
 export const useIdInstance = () => useCredentialsStore(selectIdInstance);
 export const useApiTokenInstance = () => useCredentialsStore(selectApiTokenInstance);
 export const useApiCredentials = () => useCredentialsStore((s) => s);
+export const useHasCredentials = () => useCredentialsStore(selectHasCredentials);
 export const getCredentials = (): CredentialsState => useCredentialsStore.getState();
 
 export const setApiUrl = (apiUrl: string) => {
