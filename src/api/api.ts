@@ -3,12 +3,14 @@ import { getCredentials } from '../store/credensials.store.ts';
 import type {
   CheckAccountRequest,
   CheckAccountResponse,
+  DeleteNotificationResponse,
   GetChatResponse,
   GetContactInfoRequest,
   GetContactInfoResponse,
   GetContactsResponse,
   IncomingMessagesResponse,
   LastMessagesRequest,
+  NotificationResponse,
   OutgoingMessagesResponse,
   SendMessageRequest,
   SendMessageResponse,
@@ -84,6 +86,23 @@ export const sendMessage = async (request: SendMessageRequest) => {
   const response = await axios.post<SendMessageResponse>(
     `${apiUrl}/waInstance${idInstance}/sendMessage/${apiTokenInstance}`,
     request,
+  );
+  return response.data;
+};
+
+export const receiveNotification = async () => {
+  const { apiUrl, idInstance, apiTokenInstance } = getCredentials();
+  const seconds = 30; // todo только для разработки
+  const response = await axios.get<NotificationResponse>(
+    `${apiUrl}/waInstance${idInstance}/receiveNotification/${apiTokenInstance}?receiveTimeout=${seconds}`,
+  );
+  return response.data;
+};
+
+export const deleteNotification = async (receiptId: number) => {
+  const { apiUrl, idInstance, apiTokenInstance } = getCredentials();
+  const response = await axios.get<DeleteNotificationResponse>(
+    `${apiUrl}/waInstance${idInstance}/deleteNotification/${apiTokenInstance}/${receiptId}`,
   );
   return response.data;
 };

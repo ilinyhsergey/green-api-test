@@ -99,3 +99,51 @@ export interface SendMessageResponse {
   idMessage: string;
   [property: string]: any;
 }
+
+
+export interface NotificationResponse {
+  body: Body;
+  receiptId: number;
+  [property: string]: any;
+}
+
+export interface Body {
+  idMessage: string;
+  instanceData: InstanceData;
+  messageData: MessageData;
+  senderData: SenderData;
+  timestamp: number;
+  typeWebhook: string;
+  [property: string]: any;
+}
+
+export interface InstanceData {
+  idInstance: number;
+  typeInstance: string;
+  wid: string;
+  [property: string]: any;
+}
+
+export interface MessageData {
+  textMessageData: TextMessageData;
+  typeMessage: string;
+  [property: string]: any;
+}
+
+export interface TextMessageData {
+  textMessage: string;
+  [property: string]: any;
+}
+
+export interface SenderData {
+  chatId: string;
+  sender: string;
+  senderName: string;
+  [property: string]: any;
+}
+
+export interface DeleteNotificationResponse {
+  reason: string;
+  result: boolean;
+  [property: string]: any;
+}
