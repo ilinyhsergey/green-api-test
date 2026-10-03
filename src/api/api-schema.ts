@@ -39,5 +39,12 @@ export interface GetContactInfoResponse {
   lastSeen: number;
   name: string;
   phoneNumber: number;
+  chatType:"user"
+  description: string;
+  isPremium:boolean;
+  isScam: boolean;
+  isVerified:boolean;
+  phoneNumberTimestamp: number;
+  username: string;
   [property: string]: any;
 }

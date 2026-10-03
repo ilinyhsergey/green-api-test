@@ -6,21 +6,16 @@ import { getContactInfo } from '../../api/api.ts';
 import { QueryKeys } from '../../api/query-keys.ts';
 import { useQuery } from '@tanstack/react-query';
 import { useParams } from 'react-router';
+import { formatTime } from '../../shared/lib/format-time.ts';
 
-interface Message {
+interface Message { // todo remove it
   id: string;
   text: string;
   time: string;
   fromMe: boolean;
 }
 
-const MOCK_CONTACT = {
-  name: 'Иван Иванов',
-  subtitle: 'был в сети недавно',
-  avatar: null,
-};
-
-const MOCK_MESSAGES: Message[] = [
+const MOCK_MESSAGES: Message[] = [ // todo remove it
   { id: '1', text: 'Привет! Как дела?', time: '10:12', fromMe: false },
   { id: '2', text: 'Привет! Всё отлично, а у тебя?', time: '10:13', fromMe: true },
   { id: '3', text: 'Тоже хорошо, спасибо', time: '10:14', fromMe: false },
@@ -47,10 +42,12 @@ export const Chat: FC = () => {
     <div className={classes.chat}>
       <div className={classes.header}>
         <Group gap="sm">
-          <Avatar src={MOCK_CONTACT.avatar} radius="xl"/>
+          <Avatar src={data?.avatar} radius="xl"/>
           <Stack gap={0}>
-            <Text fw={500}>{MOCK_CONTACT.name}</Text>
-            <Text size="xs" c="dimmed">{MOCK_CONTACT.subtitle}</Text>
+            <Text fw={500}>{data?.contactName}</Text>
+            {!!data?.lastSeen &&
+              <Text size="xs" c="dimmed">был(а) в сети {formatTime(data?.lastSeen)}</Text>
+            }
           </Stack>
         </Group>
 
