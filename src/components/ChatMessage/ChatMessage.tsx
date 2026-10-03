@@ -1,11 +1,11 @@
 import type { FC } from 'react';
 import { Box, Paper, Text } from '@mantine/core';
 import classes from './ChatMessage.module.css';
-import type { IncomingMessagesResponse } from '../../api/api-schema.ts';
+import { type BaseMessagesResponse } from '../../api/api-schema.ts';
 import { formatTime } from '../../shared/lib/format-time.ts';
 
 interface ChatMessageProps {
-  message: IncomingMessagesResponse;
+  message: BaseMessagesResponse;
 }
 
 export const ChatMessage: FC<ChatMessageProps> = ({ message }) => {

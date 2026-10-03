@@ -57,48 +57,33 @@ export interface LastMessagesRequest {
   [property: string]: any;
 }
 
-interface BaseMessagesResponse {
-
-}
-
-export interface IncomingMessagesResponse {
-  chatId?: string;
-  chatType:string;
-  deletedMessageId?: string;
-  editedMessageId?: string;
-  forwardingScore:number;
-  idMessage?: string;
-  isDeleted?: boolean;
-  isEdited?: boolean;
-  isForwarded:boolean;
-  senderContactName?: string;
-  senderId?: string;
-  senderName?: string;
-  senderType:string;
-  textMessage?: string;
-  timestamp?: number;
-  type?: string;
-  typeMessage?: string;
-  [property: string]: any;
-}
-
-export interface OutgoingMessagesResponse {
+export interface BaseMessagesResponse {
   chatId?: string;
   chatType: string;
   deletedMessageId?: string;
   editedMessageId?: string;
-  forwardingScore:number;
+  forwardingScore: number;
   idMessage?: string;
   isDeleted?: boolean;
   isEdited?: boolean;
-  isForwarded:boolean;
-  sendByApi?: boolean;
-  statusMessage?: string;
+  isForwarded: boolean;
   textMessage?: string;
   timestamp?: number;
   type?: string;
   typeMessage?: string;
   [property: string]: any;
+}
+
+export interface IncomingMessagesResponse extends BaseMessagesResponse {
+  senderContactName?: string;
+  senderId?: string;
+  senderName?: string;
+  senderType: string;
+}
+
+export interface OutgoingMessagesResponse extends BaseMessagesResponse {
+  sendByApi?: boolean;
+  statusMessage?: string;
 }
 
 export interface SendMessageRequest {
