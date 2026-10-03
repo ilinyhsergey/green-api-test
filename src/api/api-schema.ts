@@ -49,14 +49,19 @@ export interface GetContactInfoResponse {
   [property: string]: any;
 }
 
-export interface LastIncomingMessagesRequest {
+export interface LastMessagesRequest {
   /**
    * Время в минутах
    */
   minutes: string;
   [property: string]: any;
 }
-export interface LastIncomingMessagesResponse {
+
+interface BaseMessagesResponse {
+
+}
+
+export interface IncomingMessagesResponse {
   chatId?: string;
   chatType:string;
   deletedMessageId?: string;
@@ -70,6 +75,25 @@ export interface LastIncomingMessagesResponse {
   senderId?: string;
   senderName?: string;
   senderType:string;
+  textMessage?: string;
+  timestamp?: number;
+  type?: string;
+  typeMessage?: string;
+  [property: string]: any;
+}
+
+export interface OutgoingMessagesResponse {
+  chatId?: string;
+  chatType: string;
+  deletedMessageId?: string;
+  editedMessageId?: string;
+  forwardingScore:number;
+  idMessage?: string;
+  isDeleted?: boolean;
+  isEdited?: boolean;
+  isForwarded:boolean;
+  sendByApi?: boolean;
+  statusMessage?: string;
   textMessage?: string;
   timestamp?: number;
   type?: string;

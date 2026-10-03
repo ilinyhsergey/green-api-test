@@ -4,7 +4,7 @@ import classes from './ChatMessages.module.css';
 import { useParams } from 'react-router';
 import { useQuery } from '@tanstack/react-query';
 import { QueryKeys } from '../../api/query-keys.ts';
-import { getLastIncomingMessages } from '../../api/api.ts';
+import { getLastMessages } from '../../api/api.ts';
 import { PageError } from '../PageError/PageError.tsx';
 import { PageLoader } from '../PageLoader/PageLoader.tsx';
 import { ChatMessage } from '../ChatMessage/ChatMessage.tsx';
@@ -13,11 +13,11 @@ import { ChatMessage } from '../ChatMessage/ChatMessage.tsx';
 export const ChatMessages: FC = () => {
   const params = useParams();
 
-  const contactInfo = useQuery({
-    queryKey: [QueryKeys.lastIncomingMessages, { minutes: 10080 }],
-    queryFn: getLastIncomingMessages,
+  const lastIncomingMessagesQuery = useQuery({
+    queryKey: [QueryKeys.lastMessages],
+    queryFn: getLastMessages,
   });
-  const { isPending, isError, data, refetch } = contactInfo;
+  const { isPending, isError, data, refetch } = lastIncomingMessagesQuery;
 
   if (isPending) {
     return <PageLoader/>;

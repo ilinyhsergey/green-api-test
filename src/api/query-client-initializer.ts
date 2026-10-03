@@ -1,6 +1,6 @@
 import { QueryClient } from '@tanstack/react-query';
 import { checkAccount, sendMessage } from './api.ts';
-import type { GetChatResponse, LastIncomingMessagesResponse } from './api-schema.ts';
+import type { GetChatResponse, IncomingMessagesResponse } from './api-schema.ts';
 import { QueryKeys } from './query-keys.ts';
 
 export const initializeQueryClient = (queryClient: QueryClient): QueryClient => {
@@ -29,12 +29,13 @@ export const initializeQueryClient = (queryClient: QueryClient): QueryClient => 
     onMutate: async (variables, context) => {
       const { chatId, message } = variables;
 
-      await context.client.cancelQueries({ queryKey: [QueryKeys.lastIncomingMessages] });
+      await context.client.cancelQueries({ queryKey: [QueryKeys.lastMessages] });
 
-      const optimisticMessage: LastIncomingMessagesResponse = {
+      const timestampInSeconds = Math.floor(Date.now().valueOf() / 1000);
+      const optimisticMessage: IncomingMessagesResponse = {
         chatId,
         textMessage: message,
-        timestamp: Date.now().valueOf(),
+        timestamp: timestampInSeconds,
         type: 'outgoing',
         chatType: 'user',
         forwardingScore: 0,
@@ -42,27 +43,27 @@ export const initializeQueryClient = (queryClient: QueryClient): QueryClient => 
         senderType: 'user',
       };
 
-      context.client.setQueryData([QueryKeys.lastIncomingMessages], (old: LastIncomingMessagesResponse[]) => {
+      context.client.setQueryData([QueryKeys.lastMessages], (old: IncomingMessagesResponse[]) => {
         return [...(old ?? []), optimisticMessage];
       });
 
       return { optimisticMessage };
     },
     onSuccess: (result, _variables, onMutateResult, context) => {
-      context.client.setQueryData([QueryKeys.lastIncomingMessages], (old: LastIncomingMessagesResponse[]) =>
-        (old ?? []).map((message) =>
+      context.client.setQueryData([QueryKeys.lastMessages], (old: IncomingMessagesResponse[]) => {
+        return (old ?? []).map((message) =>
           (message.chatId === onMutateResult.optimisticMessage.chatId && message.textMessage === onMutateResult.optimisticMessage.textMessage)
             ? { ...message, idMessage: result.idMessage }
             : message,
-        ),
-      );
+        );
+      });
     },
     onError: (_error, _variables, onMutateResult, context) => {
       if (!onMutateResult) {
         return;
       }
 
-      context.client.setQueryData([QueryKeys.lastIncomingMessages], (old: LastIncomingMessagesResponse[]) =>
+      context.client.setQueryData([QueryKeys.lastMessages], (old: IncomingMessagesResponse[]) =>
         old.filter((message) =>
           !(message.chatId === onMutateResult.optimisticMessage.chatId && message.textMessage === onMutateResult.optimisticMessage.textMessage),
         ),

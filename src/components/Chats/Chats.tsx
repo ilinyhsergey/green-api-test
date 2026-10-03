@@ -4,6 +4,7 @@ import { NavLink } from 'react-router';
 import { useQuery } from '@tanstack/react-query';
 import { getChats } from '../../api/api.ts';
 import { QueryKeys } from '../../api/query-keys.ts';
+import { Progress } from '@mantine/core';
 
 export interface ChatsProps {
   setSelectedChatId?: (chatId: string) => void;
@@ -18,12 +19,12 @@ export const Chats: FC<ChatsProps> = ({ setSelectedChatId }) => {
   const { isPending, isError, data, error } = chatsQuery;
 
   if (isPending) {
-    return '...'; // todo
+    return <Progress value={100} animated size="xs"/>;
   }
 
   if (isError) {
     console.error('__ error:', error);
-    return '---'; // todo
+    return '';
   }
 
   const links = data.map(({chatId, phoneNumber}) => (

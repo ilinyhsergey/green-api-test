@@ -7,8 +7,9 @@ import type {
   GetContactInfoRequest,
   GetContactInfoResponse,
   GetContactsResponse,
-  LastIncomingMessagesRequest,
-  LastIncomingMessagesResponse,
+  IncomingMessagesResponse,
+  LastMessagesRequest,
+  OutgoingMessagesResponse,
   SendMessageRequest,
   SendMessageResponse,
 } from './api-schema.ts';
@@ -52,14 +53,29 @@ export const checkAccount = async (request: CheckAccountRequest) => {
   return response.data;
 };
 
-export const getLastIncomingMessages = async ({ queryKey }) => {
-  const [, data] = queryKey as [unknown, LastIncomingMessagesRequest];
+export const getLastMessages = async ({ queryKey }) => {
+  const data: LastMessagesRequest = { minutes: '10080' };
   const { apiUrl, idInstance, apiTokenInstance } = getCredentials();
-  const response = await axios.get<LastIncomingMessagesResponse[]>(
+
+
+  const incomingPromise = axios.get<IncomingMessagesResponse[]>(
     `${apiUrl}/waInstance${idInstance}/lastIncomingMessages/${apiTokenInstance}`,
     { data },
   );
-  return response.data;
+  const outgoingPromise = axios.get<OutgoingMessagesResponse[]>(
+    `${apiUrl}/waInstance${idInstance}/lastOutgoingMessages/${apiTokenInstance}`,
+    { data },
+  );
+
+  const [incomingResponse, outgoingResponse] = await Promise.all([incomingPromise, outgoingPromise]);
+
+  return [...incomingResponse.data, ...outgoingResponse.data]
+    .sort((a, b) => {
+      if (!a.timestamp || !b.timestamp) {
+        return 0;
+      }
+      return a.timestamp - b.timestamp;
+    });
 };
 
 export const sendMessage = async (request: SendMessageRequest) => {

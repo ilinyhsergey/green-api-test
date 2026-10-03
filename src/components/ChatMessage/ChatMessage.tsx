@@ -1,15 +1,15 @@
 import type { FC } from 'react';
 import { Box, Paper, Text } from '@mantine/core';
 import classes from './ChatMessage.module.css';
-import type { LastIncomingMessagesResponse } from '../../api/api-schema.ts';
+import type { IncomingMessagesResponse } from '../../api/api-schema.ts';
 import { formatTime } from '../../shared/lib/format-time.ts';
 
 interface ChatMessageProps {
-  message: LastIncomingMessagesResponse;
+  message: IncomingMessagesResponse;
 }
 
 export const ChatMessage: FC<ChatMessageProps> = ({ message }) => {
-  const { type, textMessage, timestamp } = message;
+  const { type, textMessage, timestamp: timeInSeconds } = message;
   const isIncoming = type === 'incoming';
 
   return (
@@ -25,7 +25,7 @@ export const ChatMessage: FC<ChatMessageProps> = ({ message }) => {
           {textMessage}
         </Text>
         <Text size="xs" c={isIncoming ? 'dimmed' : 'blue.0'} ta="right">
-          {formatTime(timestamp)}
+          {formatTime(1000 * (timeInSeconds ?? 0))}
         </Text>
       </Paper>
     </Box>

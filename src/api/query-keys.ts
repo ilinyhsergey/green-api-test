@@ -2,7 +2,7 @@ export const QueryKeys = Object.freeze({
   chats: 'chats',
   addChat: 'addChat',
   currentContactInfo: 'currentContactInfo',
-  lastIncomingMessages: 'lastIncomingMessages',
+  lastMessages: 'lastMessages',
   sendMessage: 'sendMessage',
 } as const);
 
