@@ -42,13 +42,15 @@ export const initializeQueryClient = (queryClient: QueryClient): QueryClient => 
         senderType: 'user',
       };
 
-      context.client.setQueryData([QueryKeys.lastIncomingMessages], (old: LastIncomingMessagesResponse[]) => [...old, optimisticMessage]);
+      context.client.setQueryData([QueryKeys.lastIncomingMessages], (old: LastIncomingMessagesResponse[]) => {
+        return [...(old ?? []), optimisticMessage];
+      });
 
       return { optimisticMessage };
     },
     onSuccess: (result, _variables, onMutateResult, context) => {
       context.client.setQueryData([QueryKeys.lastIncomingMessages], (old: LastIncomingMessagesResponse[]) =>
-        old.map((message) =>
+        (old ?? []).map((message) =>
           (message.chatId === onMutateResult.optimisticMessage.chatId && message.textMessage === onMutateResult.optimisticMessage.textMessage)
             ? { ...message, idMessage: result.idMessage }
             : message,
@@ -62,7 +64,7 @@ export const initializeQueryClient = (queryClient: QueryClient): QueryClient => 
 
       context.client.setQueryData([QueryKeys.lastIncomingMessages], (old: LastIncomingMessagesResponse[]) =>
         old.filter((message) =>
-          message.chatId !== onMutateResult.optimisticMessage.chatId && message.textMessage !== onMutateResult.optimisticMessage.textMessage,
+          !(message.chatId === onMutateResult.optimisticMessage.chatId && message.textMessage === onMutateResult.optimisticMessage.textMessage),
         ),
       );
     },
