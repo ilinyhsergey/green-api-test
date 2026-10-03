@@ -29,7 +29,7 @@ export const AppRoot: FC = () => {
         <Navbar/>
       </AppShell.Navbar>
 
-      <AppShell.Main>
+      <AppShell.Main className={classes.main}>
         <Outlet/>
       </AppShell.Main>
     </AppShell>

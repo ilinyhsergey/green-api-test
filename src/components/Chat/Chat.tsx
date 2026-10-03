@@ -1,5 +1,6 @@
 import { type FC, type FormEvent, useState } from 'react';
-import { ActionIcon, Avatar, Box, Group, Paper, ScrollArea, Stack, Text, TextInput } from '@mantine/core';
+import { ActionIcon, Avatar, Box, Group, Paper, ScrollArea, Stack, Text, Textarea } from '@mantine/core';
+import { useElementSize } from '@mantine/hooks';
 import { IconDotsVertical, IconSend } from '@tabler/icons-react';
 import classes from './Chat.module.css';
 import { getContactInfo } from '../../api/api.ts';
@@ -32,6 +33,8 @@ export const Chat: FC = () => {
   const { isPending, isError, data, error } = contactInfo;
 
   const [messageText, setMessageText] = useState('');
+  const { ref: chatRef, height: chatHeight } = useElementSize();
+  const footerMaxHeight = chatHeight ? chatHeight / 3 : undefined;
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -39,7 +42,7 @@ export const Chat: FC = () => {
   };
 
   return (
-    <div className={classes.chat}>
+    <div className={classes.chat} ref={chatRef}>
       <div className={classes.header}>
         <Group gap="sm">
           <Avatar src={data?.avatar} radius="xl"/>
@@ -76,11 +79,14 @@ export const Chat: FC = () => {
       </ScrollArea>
 
       <form className={classes.footer} onSubmit={handleSubmit}>
-        <TextInput
+        <Textarea
           className={classes.input}
+          autosize
+          minRows={1}
           placeholder="Напишите сообщение..."
           value={messageText}
           onChange={(event) => setMessageText(event.currentTarget.value)}
+          styles={{ input: { maxHeight: footerMaxHeight, overflowY: 'auto' } }}
         />
         <ActionIcon type="submit" size="lg" variant="filled" aria-label="Отправить">
           <IconSend size={18} stroke={1.5}/>
