@@ -26,3 +26,18 @@ export interface CheckAccountResponse {
   username: string;
   [property: string]: any;
 }
+
+export interface GetContactInfoRequest {
+  chatId: string;
+  [property: string]: any;
+}
+
+export interface GetContactInfoResponse {
+  avatar: string;
+  chatId: string;
+  contactName: string;
+  lastSeen: number;
+  name: string;
+  phoneNumber: number;
+  [property: string]: any;
+}

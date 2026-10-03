@@ -1,6 +1,13 @@
 import axios from 'axios';
 import { getCredentials } from '../store/credensials.store.ts';
-import type { CheckAccountRequest, CheckAccountResponse, GetChatResponse, GetContactsResponse } from './api-schema.ts';
+import type {
+  CheckAccountRequest,
+  CheckAccountResponse,
+  GetChatResponse,
+  GetContactInfoRequest,
+  GetContactInfoResponse,
+  GetContactsResponse,
+} from './api-schema.ts';
 
 export const getContacts = async (): Promise<GetContactsResponse[]> => {
   const { apiUrl, idInstance, apiTokenInstance } = getCredentials();
@@ -16,6 +23,17 @@ export const getChats = async (): Promise<GetChatResponse[]> => {
 
   const response = await axios.get<GetChatResponse[]>(
     `${apiUrl}/waInstance${idInstance}/getChats/${apiTokenInstance}`,
+  );
+  return response.data;
+};
+
+export const getContactInfo = async ({ queryKey }): Promise<GetContactInfoResponse> => {
+  const [, data] = queryKey as [unknown, GetContactInfoRequest];
+  const { apiUrl, idInstance, apiTokenInstance } = getCredentials();
+
+  const response = await axios.post<GetContactInfoResponse>(
+    `${apiUrl}/waInstance${idInstance}/getContactInfo/${apiTokenInstance}`,
+    data,
   );
   return response.data;
 };

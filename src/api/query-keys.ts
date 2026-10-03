@@ -1,5 +1,6 @@
 export const QueryKeys = Object.freeze({
   chats: 'chats',
+  currentContactInfo: 'currentContactInfo',
   addChat: 'addChat',
 } as const);
 
