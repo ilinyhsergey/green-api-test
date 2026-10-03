@@ -9,6 +9,8 @@ import type {
   GetContactsResponse,
   LastIncomingMessagesRequest,
   LastIncomingMessagesResponse,
+  SendMessageRequest,
+  SendMessageResponse,
 } from './api-schema.ts';
 
 export const getContacts = async () => {
@@ -56,6 +58,16 @@ export const getLastIncomingMessages = async ({ queryKey }) => {
   const response = await axios.get<LastIncomingMessagesResponse[]>(
     `${apiUrl}/waInstance${idInstance}/lastIncomingMessages/${apiTokenInstance}`,
     { data },
+  );
+  return response.data;
+};
+
+export const sendMessage = async (request: SendMessageRequest) => {
+  const { apiUrl, idInstance, apiTokenInstance } = getCredentials();
+
+  const response = await axios.post<SendMessageResponse>(
+    `${apiUrl}/waInstance${idInstance}/sendMessage/${apiTokenInstance}`,
+    request,
   );
   return response.data;
 };

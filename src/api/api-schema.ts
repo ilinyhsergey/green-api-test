@@ -76,3 +76,17 @@ export interface LastIncomingMessagesResponse {
   typeMessage?: string;
   [property: string]: any;
 }
+
+export interface SendMessageRequest {
+  chatId: string;
+  message: string;
+  quotedMessageId?: string;
+  typingTime?: number;
+  typingType?: string;
+  [property: string]: any;
+}
+
+export interface SendMessageResponse {
+  idMessage: string;
+  [property: string]: any;
+}

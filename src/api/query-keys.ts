@@ -3,6 +3,7 @@ export const QueryKeys = Object.freeze({
   addChat: 'addChat',
   currentContactInfo: 'currentContactInfo',
   lastIncomingMessages: 'lastIncomingMessages',
+  sendMessage: 'sendMessage',
 } as const);
 
 export type QueryKeys = typeof QueryKeys[keyof typeof QueryKeys];

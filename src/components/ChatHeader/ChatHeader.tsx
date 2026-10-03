@@ -14,8 +14,9 @@ export const ChatHeader: FC = () => {
   const contactInfo = useQuery({
     queryKey: [QueryKeys.currentContactInfo, { chatId: params.chatId }],
     queryFn: getContactInfo,
+    enabled: !!params.chatId,
   });
-  const { isPending, isError, data } = contactInfo;
+  const { isPending, isLoading, isError, data } = contactInfo;
 
   return (
     <div className={classes.header}>
@@ -29,7 +30,7 @@ export const ChatHeader: FC = () => {
           }
         </Stack>
 
-        {isPending && <Progress value={100} animated size="xs"/>}
+        {isLoading && <Progress value={100} animated size="xs"/>}
       </Group>
 
       <ActionIcon variant="subtle" size="lg" aria-label="Меню чата" disabled={isPending || isError}>
