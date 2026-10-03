@@ -1,5 +1,5 @@
 import type { FC } from 'react';
-import { Box, Paper, ScrollArea, Stack, Text } from '@mantine/core';
+import { ScrollArea, Stack } from '@mantine/core';
 import classes from './ChatMessages.module.css';
 import { useParams } from 'react-router';
 import { useQuery } from '@tanstack/react-query';
@@ -7,7 +7,7 @@ import { QueryKeys } from '../../api/query-keys.ts';
 import { getLastIncomingMessages } from '../../api/api.ts';
 import { PageError } from '../PageError/PageError.tsx';
 import { PageLoader } from '../PageLoader/PageLoader.tsx';
-import { formatTime } from '../../shared/lib/format-time.ts';
+import { ChatMessage } from '../ChatMessage/ChatMessage.tsx';
 
 
 export const ChatMessages: FC = () => {
@@ -34,32 +34,7 @@ export const ChatMessages: FC = () => {
       <Stack className={classes.messages} gap="xs" py="md">
         {data
           .filter((message) => message.chatId === chatId) // todo обработать в хранилище
-          .map((message) => {
-            const { idMessage, type, textMessage, timestamp } = message;
-            const isIncoming = type === 'incoming';
-
-            return (
-              <Box
-                key={idMessage}
-                className={`${classes.messageRow} ${isIncoming ? classes.incoming : classes.outgoing}`}
-              >
-                <Paper
-                  className={classes.bubble}
-                  radius="md"
-                  p="xs"
-                  withBorder={isIncoming}
-                  bg={!isIncoming ? 'blue.6' : undefined}
-                >
-                  <Text size="sm" c={!isIncoming ? 'white' : undefined}>
-                    {textMessage}
-                  </Text>
-                  <Text size="xs" c={!isIncoming ? 'blue.0' : 'dimmed'} ta="right">
-                    {formatTime(timestamp)}
-                  </Text>
-                </Paper>
-              </Box>
-            );
-          })}
+          .map((message) => <ChatMessage key={message.idMessage} message={message}/>)}
       </Stack>
     </ScrollArea>
   );
